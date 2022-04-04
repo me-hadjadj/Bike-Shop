@@ -90,8 +90,8 @@ router.post('/create-checkout-session', async (req, res) => {
     payment_method_types: ['card'],
     line_items,
     mode: 'payment',
-    success_url: 'https://quiet-gorge-08706.herokuapp.com/success',
-    cancel_url: 'https://quiet-gorge-08706.herokuapp.com/cancel',
+    success_url: 'https://bike-shop-fr.herokuapp.com/success',
+    cancel_url: 'https://bike-shop-fr.herokuapp.com/cancel',
   });
  
   res.redirect(303, session.url);
