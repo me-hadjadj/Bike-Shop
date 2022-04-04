@@ -49,6 +49,7 @@
                         <th scope="col">Picture</th>
                         <th scope="col">Model</th>
                         <th scope="col">Quantity</th>
+                        <th scope="col">Shipping fees</th>
                         <th scope="col">Price</th>
                         <th scope="col">Total</th>
                         <th scope="col">Suppr</th>
@@ -58,6 +59,7 @@
                         <% 
 
                         var totalCmd = 0;
+                        var ShippingFeesTotal = 0;
                         for(var i=0;i<dataCardBike.length;i++){
                         %>
                             <tr class="basket-item">
@@ -69,17 +71,30 @@
                                 <td>
                                     <form action="/update-shop" method="post" class="inputQty" >
                                         <input type="hidden" name="position" value=<%= i %>>
-                                        <input type="text" name="quantity" value="" placeholder="<%= dataCardBike[i].quantity%>>"
+                                        <input type="text" name="quantity" value="" placeholder=<%= dataCardBike[i].quantity%>>
                                         <button id='button'class="btn btn-outline-info btn-sm" name="button"><i class="fas fa-sync-alt"></i></button>
                                     </form>
                         
                                 </td>
+                                <% var ShippingFees = dataCardBike[i].quantity*30 ; %>
+                                <td><%= ShippingFees %> €</td>
                                 <td><%= dataCardBike[i].price %>€</td>
                                 <td><%= dataCardBike[i].price * dataCardBike[i].quantity %>€</td>
                                 <td><a href="/delete-shop?id=<%= i %>"class="btn btn-outline-info btn-sm" name="button"><i class="far fa-trash-alt"></i></a></td>
                             </tr>
                         <%
-                            totalCmd += dataCardBike[i].price * dataCardBike[i].quantity;
+                            totalCmd += (dataCardBike[i].price * dataCardBike[i].quantity);
+                            ShippingFeesTotal += dataCardBike[i].quantity*30
+            
+                        
+                            if ( 2000 < totalCmd  && totalCmd < 4000) {
+                                ShippingFeesTotal/2;
+                            } else if (totalCmd > 4000) { 
+                                ShippingFeesTotal = 0;
+                            } else if (totalCmd < 2000) {
+                                ShippingFeesTotal
+                            }
+                            
                             // or totalCmd = dataCardBike[i].price * dataCardBike[i].quantity + totalCmd;
                         }
                         %>
@@ -90,8 +105,20 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
+                        <td class="total-box"><% if(totalCmd > 2000 && 4000 > totalCmd ){%>Shipping costs with 50% discount:<%}else{%> Total Shipping Fees : <%};%></td>
+                        <td><% if (totalCmd < 2000){%><%= ShippingFeesTotal  %>€ <%}else if(totalCmd > 2000 && 4000 > totalCmd){%><%= ShippingFeesTotal/2 %>€<%}else if (totalCmd > 4000){%><h6>Shipping free</h6><%}%></td>                       
+                        <td></td>
+                      </tr>
+
+                      <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                         <td class="total-box">Total Basket : </td>
-                        <td><%= totalCmd %>€</td>
+                        <td><%= totalCmd + ShippingFeesTotal %>€</td>
                         <td></td>
                       </tr>
                     </tbody>
